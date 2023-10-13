@@ -6,17 +6,17 @@ class AugustImage:
     def __init__(self, img_path: str) -> None:
         self.img = PILImage.open(img_path)
 
+    def save(self, filename: str) -> None:
+        self.img.save(filename)
+
+    def show(self) -> None:
+        self.img.show()
+
     def mirror(self) -> None:
         self.img = self.img.transpose(PILImage.FLIP_LEFT_RIGHT)
 
     def flip(self) -> None:
         self.img = self.img.transpose(PILImage.FLIP_TOP_BOTTOM)
-
-    def save(self, filename: str) -> None:
-        pass
-
-    def show(self) -> None:
-        self.img.show()
 
     def _sepia(self) -> None:
         self.img = utils.sepia(self.img)
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     test_path = Path("/home/pawel/august/august/images/tests/resources/")
     test_img = test_path / "test_image.jpg"
     img = AugustImage(test_img)
-    # img.mirror()
+    img.mirror()
     # img.flip()
     # img._sepia()
     # img._black_and_white()
@@ -59,5 +59,9 @@ if __name__ == "__main__":
     # img.rotate(30)
     # img.crop(100, 0, 800, 400)
     # img.offset(0, 100)
-    img.zoom(100, 100, 4)
+    # img.zoom(100, 100, 4)
     img.show()
+    img.save("test_image_mirrored.jpg")
+
+    base_filename = "test_image"
+    extra_names = ("mirror", "flip", "sepia", "bw", "warm", "rotated", "cropped", "offset", "zoom")
