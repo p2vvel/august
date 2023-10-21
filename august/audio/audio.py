@@ -1,55 +1,68 @@
 from pydub import AudioSegment
 from pydub.playback import play
-
-
-class AugustAudio:
-    def __init__(self, filename: str):
-        self.audio: AudioSegment = AudioSegment.from_file(filename)
-
-    def time_shift(self, endurance: int, t1: int, t2: int):
-        a, b = sorted([t1, t2])
-        t = min(endurance, b - a)
-        self.audio = (
-            self.audio[:a]
-            + self.audio[b : b + t]
-            + self.audio[a + t : b]
-            + self.audio[a : a + t]
-            + self.audio[b + t :]
-        )
-    
-    def time_stretch(self, factor: float):
-        # function to change audio speed without changing pitch
-        # https://stackoverflow.com/questions/51434897/how-to-change-audio-speed-without-changing-pitch-with-ffmpeg
-        self.audio = self.audio._spawn(
-            self.audio.raw_data,
-            overrides={
-                "frame_rate": int(self.audio.frame_rate * factor)
-            }
-        )
-        self.audio = self.audio.set_frame_rate(self.audio.frame_rate)
-
+import random
+import numpy as np
+from audiomentations import (Compose, 
+                             AddBackgroundNoise, 
+                             AddShortNoises, 
+                             )
 
 # Time shifting
-# Time stretching
-# Pitch scaling
+
+def time_shift(y, sr, endurance: int, t1: int, t2: int):
+    pass
+
+def time_stretch(y, sr, factor: float):
+    new_y = librosa.effects.time_stretch(y, rate=factor)
+    return new_y
+
+def pitch_scale(signal, sr, num_semitones):
+    return librosa.effects.pitch_shift(signal, sr=sr, n_steps=num_semitones)
+
+def random_gain(signal, min_factor, max_factor):
+    gain_rate = random.uniform(min_factor, max_factor)
+    augmented_signal = signal * gain_rate
+    return augmented_signal
+
+
+def invert_polarity(signal):
+    return signal * -1
+
+
+def reverb(y, sr):
+    return librosa.
+
 # Noise addition
 # Impulse response addition
 # Filters
-# Polarity Inversion
-# Random gain
 # Time masking
 # Frequency masking
 ###### https://youtu.be/bm1cQfb_pLA?si=8FGGSA3zPCxUseGJ
 
 
+def librosa_play(y, sr):
+    # convert from float to uint16
+    temp = np.array(y * (1<<15), dtype=np.int16)
+    audio_segment = AudioSegment(
+        temp.tobytes(), 
+        frame_rate=sr,
+        sample_width=temp.dtype.itemsize, 
+        channels=1
+    )
+    play(audio_segment)
+
 if __name__ == "__main__":
     path = "/home/pawel/august/august/audio/tests/resources/bff.m4a"
-    temp = AugustAudio(path)
-    # AugustAudio.time_shift(temp, 5000, 0, 5000)
-    AugustAudio.time_stretch(temp, 0.5)
-    audio: AudioSegment = temp.audio
+    
+    from IPython.display import Audio
 
+    import librosa
+    y, sr = librosa.load(path)
 
-    play(audio)
+    # y = time_stretch(y, sr, 0.6)
+    # y = pitch_scale(y, sr, -3)
+    # y = invert_polarity(y)
+    y = random_gain(y, min_factor=1.5, max_factor=2)
 
-    from pyrubberband import pyrb
+    Audio(y, rate=sr)
+    librosa_play(y, sr)
