@@ -4,13 +4,16 @@ import random
 import numpy as np
 from audiomentations import (Compose, 
                              AddBackgroundNoise, 
-                             AddShortNoises, 
+                             AddShortNoises,
+                             Shift
                              )
 
 # Time shifting
 
-def time_shift(y, sr, endurance: int, t1: int, t2: int):
-    pass
+def time_shift(y, sr):
+    convert = Compose([Shift()])
+    y_new = convert(samples=y, sample_rate=sr)
+    return y_new
 
 def time_stretch(y, sr, factor: float):
     new_y = librosa.effects.time_stretch(y, rate=factor)
@@ -29,8 +32,8 @@ def invert_polarity(signal):
     return signal * -1
 
 
-def reverb(y, sr):
-    return librosa.
+# def reverb(y, sr):
+    # return librosa.
 
 # Noise addition
 # Impulse response addition
@@ -58,11 +61,12 @@ if __name__ == "__main__":
 
     import librosa
     y, sr = librosa.load(path)
+    y = time_shift(y, sr)
 
     # y = time_stretch(y, sr, 0.6)
     # y = pitch_scale(y, sr, -3)
     # y = invert_polarity(y)
-    y = random_gain(y, min_factor=1.5, max_factor=2)
+    # y = random_gain(y, min_factor=1.5, max_factor=2)
 
-    Audio(y, rate=sr)
+    # Audio(y, rate=sr)
     librosa_play(y, sr)
