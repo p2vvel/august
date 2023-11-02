@@ -3,8 +3,8 @@ from august.images.image import AugustImage
 
 def generate_test_images(base_path: str, ext: str):
     transforms = (
-        AugustImage.mirror,
-        AugustImage.flip,
+        AugustImage._mirror,
+        AugustImage._flip,
         AugustImage._sepia,
         AugustImage._black_and_white,
         # AugustImage._color_temperature,
@@ -30,19 +30,19 @@ def generate_test_images(base_path: str, ext: str):
     temp.save(base_path + f"/{ext}/test_image_cold.{ext}")
     # rotated
     temp = AugustImage(base_path + f"/{ext}/test_image.{ext}")
-    AugustImage.rotate(temp, 20)
+    AugustImage._rotate(temp, 20)
     temp.save(base_path + f"/{ext}/test_image_rotate.{ext}")
     # blur
     temp = AugustImage(base_path + f"/{ext}/test_image.{ext}")
-    AugustImage.blur(temp, 3)
+    AugustImage._blur(temp, 3)
     temp.save(base_path + f"/{ext}/test_image_blur.{ext}")
     # crop
     temp = AugustImage(base_path + f"/{ext}/test_image.{ext}")
-    AugustImage.crop(temp, 50, 50, 250, 250)
+    AugustImage._crop(temp, 50, 50, 250, 250)
     temp.save(base_path + f"/{ext}/test_image_crop.{ext}")
     # offset
     temp = AugustImage(base_path + f"/{ext}/test_image.{ext}")
-    AugustImage.offset(temp, 50, 50)
+    AugustImage._offset(temp, 50, 50)
     temp.save(base_path + f"/{ext}/test_image_offset.{ext}")
 
 if __name__ == "__main__":

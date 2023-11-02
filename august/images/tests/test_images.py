@@ -12,7 +12,7 @@ FORMATS = ("jpg", "png")
 def test_flip():
     for ext in FORMATS:
         transformed = AugustImage(BASE_TEST_IMAGES_PATH / ext / f"test_image.{ext}")
-        transformed.flip()
+        transformed._flip()
         test_img = Image.open(BASE_TEST_IMAGES_PATH / ext / f"test_image_flip.{ext}")
 
         assert pixelmatch(transformed.img, test_img) == 0  # all pixels are exactly the same
@@ -21,7 +21,7 @@ def test_flip():
 def test_mirror():
     for ext in FORMATS:
         transformed = AugustImage(BASE_TEST_IMAGES_PATH / ext / f"test_image.{ext}")
-        transformed.mirror()
+        transformed._mirror()
         test_img = Image.open(BASE_TEST_IMAGES_PATH / ext / f"test_image_mirror.{ext}")
 
         assert pixelmatch(transformed.img, test_img) == 0
@@ -30,7 +30,7 @@ def test_mirror():
 def test_blur():
     for ext in FORMATS:
         transformed = AugustImage(BASE_TEST_IMAGES_PATH / ext / f"test_image.{ext}")
-        transformed.blur(3)
+        transformed._blur(3)
         test_img = Image.open(BASE_TEST_IMAGES_PATH / ext / f"test_image_blur.{ext}")
 
         assert pixelmatch(transformed.img, test_img) == 0  # all pixels are exactly the same
@@ -66,7 +66,7 @@ def test_warm():
 def test_crop():
     for ext in FORMATS:
         transformed = AugustImage(BASE_TEST_IMAGES_PATH / ext / f"test_image.{ext}")
-        transformed.crop(50, 50, 250, 250)
+        transformed._crop(50, 50, 250, 250)
         test_img = Image.open(BASE_TEST_IMAGES_PATH / ext / f"test_image_crop.{ext}")
 
         assert pixelmatch(transformed.img, test_img) == 0
@@ -75,7 +75,7 @@ def test_crop():
 def test_offset():
     for ext in FORMATS:
         transformed = AugustImage(BASE_TEST_IMAGES_PATH / ext / f"test_image.{ext}")
-        transformed.offset(50, 50)
+        transformed._offset(50, 50)
         test_img = Image.open(BASE_TEST_IMAGES_PATH / ext / f"test_image_offset.{ext}")
 
         assert pixelmatch(transformed.img, test_img) <= 10
@@ -84,7 +84,7 @@ def test_offset():
 def test_rotate():
     for ext in FORMATS:
         transformed = AugustImage(BASE_TEST_IMAGES_PATH / ext / f"test_image.{ext}")
-        transformed.rotate(20)
+        transformed._rotate(20)
         test_img = Image.open(BASE_TEST_IMAGES_PATH / ext / f"test_image_rotate.{ext}")
 
         assert pixelmatch(transformed.img, test_img) <= 100
