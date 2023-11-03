@@ -1,4 +1,4 @@
-from august.images.image import AugustImage
+from august.images.images import AugustImage
 
 
 def generate_test_images(base_path: str, ext: str):

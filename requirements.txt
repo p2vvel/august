@@ -1,6 +1,9 @@
 pillow~=10.1
 pydantic~=2.4
 
+librosa~=
+pydub~=
+pyroomacoustics~=0.7
 
 pytest~=7.4
 pixelmatch~=0.3

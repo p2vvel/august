@@ -1,6 +1,6 @@
 # tests here
 from pixelmatch.contrib.PIL import pixelmatch
-from ..image import AugustImage
+from ..images import AugustImage
 from PIL import Image
 from pathlib import Path
 
