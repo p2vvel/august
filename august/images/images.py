@@ -44,14 +44,27 @@ class AugustImage(AugustImageMixin):
             pixel_radius = random.randint(pixel_radius_min, pixel_radius_max)
             self._blur(pixel_radius)
 
-    def offset(self, p: float = 0.5, x_offset_min: int = -10, x_offset_max: int = 10, y_offset_min: int = -10,
-               y_offset_max: int = 10) -> None:
+    def offset(
+        self,
+        p: float = 0.5,
+        x_offset_min: int = -10,
+        x_offset_max: int = 10,
+        y_offset_min: int = -10,
+        y_offset_max: int = 10,
+    ) -> None:
         if random.random() <= p:
             x_offset = random.randint(x_offset_min, x_offset_max)
             y_offset = random.randint(y_offset_min, y_offset_max)
             self._offset(x_offset, y_offset)
 
-    def crop(self, p: float = 0.5, min_width: float = 0.2, max_width: float = 0.9, min_height: float=0.2, max_height=0.9) -> None:
+    def crop(
+        self,
+        p: float = 0.5,
+        min_width: float = 0.2,
+        max_width: float = 0.9,
+        min_height: float = 0.2,
+        max_height=0.9,
+    ) -> None:
         if random.random() <= p:
             width, height = self.img.size
             crop_width = random.randint(int(min_width * width), int(max_width * width))
@@ -61,4 +74,3 @@ class AugustImage(AugustImageMixin):
             x_max = x_min + crop_width
             y_max = y_min + crop_height
             self._crop(x_min, y_min, x_max, y_max)
-

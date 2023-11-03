@@ -12,7 +12,7 @@ from audiomentations import (
     TimeMask,
     HighPassFilter,
     LowPassFilter,
-    RoomSimulator
+    RoomSimulator,
 )
 
 
@@ -71,7 +71,9 @@ def random_gain(y: ndarray, sr: int, *, min_factor: float, max_factor: float, p:
     return y
 
 
-def gaussian_noise(y: ndarray, sr: int, *, min_amplitude: float, max_amplitude: float, p: float) -> ndarray:
+def gaussian_noise(
+    y: ndarray, sr: int, *, min_amplitude: float, max_amplitude: float, p: float
+) -> ndarray:
     convert = Compose([AddGaussianNoise(min_amplitude=min_amplitude, max_amplitude=max_amplitude, p=p)])
     return convert(samples=y, sample_rate=sr)
 
@@ -91,7 +93,7 @@ def high_pass_filter(y: ndarray, sr: int, *, min_freq: float, max_freq: float, p
     return convert(y, sample_rate=sr)
 
 
-def room(y: ndarray, sr: int, *, p: float) -> ndarray
+def room(y: ndarray, sr: int, *, p: float) -> ndarray:
     convert = Compose([RoomSimulator(p=p)])
     return convert(y, sample_rate=sr)
 

@@ -19,7 +19,7 @@ def generate_test_images(base_path: str, ext: str):
         temp = AugustImage(base_path + f"/{ext}/test_image.{ext}")
         trans(temp)
         temp.save(base_path + f"/{ext}/test_image_{name}.{ext}")
-        
+
     # warm
     temp = AugustImage(base_path + f"/{ext}/test_image.{ext}")
     AugustImage._color_temperature(temp, 20)
@@ -44,6 +44,7 @@ def generate_test_images(base_path: str, ext: str):
     temp = AugustImage(base_path + f"/{ext}/test_image.{ext}")
     AugustImage._offset(temp, 50, 50)
     temp.save(base_path + f"/{ext}/test_image_offset.{ext}")
+
 
 if __name__ == "__main__":
     base_path = "/home/pawel/august/august/images/tests/resources"

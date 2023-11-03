@@ -2,10 +2,6 @@ from nlpaug.util import DownloadUtil
 import os
 import nlpaug.augmenter.char as nac
 import nlpaug.augmenter.word as naw
-import nlpaug.augmenter.sentence as nas
-import nlpaug.flow as nafc
-
-from nlpaug.util import Action
 
 
 def _download_models(dest_dir: str = ".", model: str = "fasttext") -> None:
@@ -20,9 +16,7 @@ def _download_models(dest_dir: str = ".", model: str = "fasttext") -> None:
         case "glove":
             DownloadUtil.download_glove(model_name="glove.6B", dest_dir=dest_dir)
         case _:
-            raise ValueError(
-                "Model value is unexpected. Only support fasttext, word2vec and glove."
-            )
+            raise ValueError("Model value is unexpected. Only support fasttext, word2vec and glove.")
 
 
 # synonym replacement

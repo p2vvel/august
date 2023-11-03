@@ -21,13 +21,19 @@ class AugustAudio:
         self.y = utils.invert_polarity(self.y, self.sr, p=p)
 
     def pitch_scale(self, min_semitones: int = -6, max_semitones: int = 6, p: float = 0.5) -> None:
-        self.y = utils.pitch_scale(self.y, self.sr, min_semitones=min_semitones, max_semitones=max_semitones, p=p)
+        self.y = utils.pitch_scale(
+            self.y, self.sr, min_semitones=min_semitones, max_semitones=max_semitones, p=p
+        )
 
     def random_gain(self, min_factor: float = 0.5, max_factor: float = 1.5, p: float = 0.5) -> None:
         self.y = utils.random_gain(self.y, self.sr, min_factor=min_factor, max_factor=max_factor, p=p)
 
-    def gaussian_noise(self, min_amplitude: float = 0.001, max_amplitude: float = 0.015, p: float = 0.5) -> None:
-        self.y = utils.gaussian_noise(self.y, min_amplitude=min_amplitude, max_amplitude=max_amplitude, p=p)
+    def gaussian_noise(
+        self, min_amplitude: float = 0.001, max_amplitude: float = 0.015, p: float = 0.5
+    ) -> None:
+        self.y = utils.gaussian_noise(
+            self.y, min_amplitude=min_amplitude, max_amplitude=max_amplitude, p=p
+        )
 
     def time_mask(self, min_part: float = 0.01, max_part: float = 0.5, p: float = 0.5) -> None:
         self.y = utils.time_mask(self.y, self.sr, min_part=min_part, max_part=max_part, p=p)
