@@ -6,5 +6,7 @@ pydub~=0.25
 audiomentations~=0.33
 pyroomacoustics~=0.7
 
+numpy~=1.26
+
 pytest~=7.4
 pixelmatch~=0.3
