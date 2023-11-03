@@ -1,8 +1,9 @@
 pillow~=10.1
 pydantic~=2.4
 
-librosa~=
-pydub~=
+librosa~=0.10
+pydub~=0.25
+audiomentations~=0.33
 pyroomacoustics~=0.7
 
 pytest~=7.4
