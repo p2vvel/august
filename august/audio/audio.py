@@ -32,7 +32,7 @@ class AugustAudio:
         self, min_amplitude: float = 0.001, max_amplitude: float = 0.015, p: float = 0.5
     ) -> None:
         self.y = utils.gaussian_noise(
-            self.y, min_amplitude=min_amplitude, max_amplitude=max_amplitude, p=p
+            self.y, self.sr, min_amplitude=min_amplitude, max_amplitude=max_amplitude, p=p
         )
 
     def time_mask(self, min_part: float = 0.01, max_part: float = 0.5, p: float = 0.5) -> None:
