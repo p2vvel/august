@@ -1,4 +1,4 @@
-from . import utils
+from august.text import utils
 
 
 class AugustText:
@@ -32,3 +32,20 @@ class AugustText:
 
     def spelling(self, p: float = 0.3) -> None:
         self.text = utils.spelling(self.text, p=p)
+
+
+if __name__ == "__main__":
+    text = "The quick brown fox jumps over the lazy dog"
+
+    aug = AugustText(text)
+    aug.synonym_replace()
+    aug.antonym_replace()
+    # aug.ocr()
+    # aug.keyboard()
+    # aug.random_character()
+    aug.random_word_delete()
+    # aug.random_word_substitute()
+    aug.random_word_swap()
+    # aug.spelling()
+
+    print(aug.text)
