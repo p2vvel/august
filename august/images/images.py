@@ -2,7 +2,7 @@ import random
 
 from PIL import Image as PILImage
 
-from .images_base import AugustImageMixin
+from august.images.images_base import AugustImageMixin
 
 
 class AugustImage(AugustImageMixin):
@@ -12,8 +12,8 @@ class AugustImage(AugustImageMixin):
     def save(self, filename: str) -> None:
         self.img.save(filename)
 
-    def show(self) -> None:
-        self.img.show()
+    def show(self, title: str | None = None) -> None:
+        self.img.show(title=title)
 
     def mirror(self, p: float = 0.5) -> None:
         if random.random() <= p:
@@ -25,17 +25,15 @@ class AugustImage(AugustImageMixin):
 
     def color_change(self, p: float = 0.5) -> None:
         if random.random() <= p:
-            if random.random() <= p:
-                self._sepia()
-            else:
-                self._black_and_white()
+            color_foo = random.choice((self._sepia, self._black_and_white))
+            color_foo()
 
     def color_temperature(self, p: float = 0.5, ratio_min: int = -50, ratio_max: int = 50) -> None:
         if random.random() <= p:
             ratio = random.randint(ratio_min, ratio_max)
             self._color_temperature(ratio)
 
-    def rotate(self, p: float = 0.5, angle_min: int = -45, angle_max: int = 45) -> None:
+    def rotate(self, p: float = 0.5, angle_min: int = -89, angle_max: int = 89) -> None:
         if random.random() <= p:
             angle = random.randint(angle_min, angle_max)
             self._rotate(angle)
@@ -48,22 +46,23 @@ class AugustImage(AugustImageMixin):
     def offset(
         self,
         p: float = 0.5,
-        x_offset_min: int = -10,
-        x_offset_max: int = 10,
-        y_offset_min: int = -10,
-        y_offset_max: int = 10,
+        x_offset_min: float = -0.5,
+        x_offset_max: float = 0.5,
+        y_offset_min: float = -0.5,
+        y_offset_max: float = 0.5,
     ) -> None:
         if random.random() <= p:
-            x_offset = random.randint(x_offset_min, x_offset_max)
-            y_offset = random.randint(y_offset_min, y_offset_max)
-            self._offset(x_offset, y_offset)
+            x, y = self.img.size
+            x_offset = random.uniform(x_offset_min, x_offset_max)
+            y_offset = random.uniform(y_offset_min, y_offset_max)
+            self._offset(int(x_offset * x), int(y_offset * y))
 
     def crop(
         self,
         p: float = 0.5,
-        min_width: float = 0.2,
+        min_width: float = 0.5,
         max_width: float = 0.9,
-        min_height: float = 0.2,
+        min_height: float = 0.5,
         max_height=0.9,
     ) -> None:
         if random.random() <= p:
@@ -75,3 +74,21 @@ class AugustImage(AugustImageMixin):
             x_max = x_min + crop_width
             y_max = y_min + crop_height
             self._crop(x_min, y_min, x_max, y_max)
+
+
+if __name__ == "__main__":
+    from pathlib import Path
+
+    base_path = Path(__file__).parent
+    img_path = base_path / "tests" / "alpaca.jpg"
+    img = AugustImage(img_path)
+    # img.show(title="original")
+    img.mirror()
+    img.flip()
+    img.color_change()
+    img.color_temperature()
+    img.rotate()
+    img.blur()
+    img.offset()
+    img.crop()
+    img.show()
