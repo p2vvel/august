@@ -1,5 +1,8 @@
+fire~=0.5
+
 pillow~=10.1
 pydantic~=2.4
+
 
 librosa~=0.10
 pydub~=0.25
