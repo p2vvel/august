@@ -1,4 +1,6 @@
-from PIL import Image as PILImage, ImageOps, ImageFilter, ImageChops
+from PIL import Image as PILImage
+from PIL import ImageChops, ImageFilter, ImageOps
+
 from . import utils
 
 

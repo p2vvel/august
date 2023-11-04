@@ -6,4 +6,6 @@ pydub~=0.25
 audiomentations~=0.33
 pyroomacoustics~=0.7
 
+nlpaug~=1.1
+
 numpy~=1.26

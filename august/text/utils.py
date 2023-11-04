@@ -1,7 +1,8 @@
-from nlpaug.util import DownloadUtil
 import os
+
 import nlpaug.augmenter.char as nac
 import nlpaug.augmenter.word as naw
+from nlpaug.util import DownloadUtil
 
 
 def _download_models(dest_dir: str = ".", model: str = "fasttext") -> None:
@@ -19,8 +20,6 @@ def _download_models(dest_dir: str = ".", model: str = "fasttext") -> None:
             raise ValueError("Model value is unexpected. Only support fasttext, word2vec and glove.")
 
 
-# synonym replacement
-# Create a function that will take a string as an argument and replace words with their synonyms, using nlpAug library.
 def synonym_replacement(text: str, n: int = 1) -> str:
     """
     Replace n words in the sentence with synonyms from wordnet.
@@ -97,17 +96,3 @@ def embedding(text: str, n: int = 1):
 
 # shuffle sentences randomly
 # exclude duplicates
-
-
-if __name__ == "__main__":
-    # _download_models("models")
-
-    text = "I love my little girl."
-    text = "The good boy quick brown fox jumps over the lazy dog."
-
-    print(text)
-    print(antonym_replacement(text, n=10))
-
-    # breakpoint()
-
-    # print(synonym_replacement(text, n=5))

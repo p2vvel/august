@@ -1,19 +1,20 @@
-import librosa
-from pydub import AudioSegment
-from pydub.playback import play
 import random
+
+import librosa
 import numpy as np
-from numpy import ndarray
 from audiomentations import (
-    Compose,
     AddGaussianNoise,
     ApplyImpulseResponse,
-    Shift,
-    TimeMask,
+    Compose,
     HighPassFilter,
     LowPassFilter,
     RoomSimulator,
+    Shift,
+    TimeMask,
 )
+from numpy import ndarray
+from pydub import AudioSegment
+from pydub.playback import play
 
 
 # TODO: add util to download echoes and implement impulse response

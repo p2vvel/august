@@ -1,7 +1,7 @@
+import librosa
 from numpy import ndarray
 
 from . import utils
-import librosa
 
 
 class AugustAudio:

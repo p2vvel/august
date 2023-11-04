@@ -1,9 +1,10 @@
 # tests here
-from pixelmatch.contrib.PIL import pixelmatch
-from ..images import AugustImage
-from PIL import Image
 from pathlib import Path
 
+from PIL import Image
+from pixelmatch.contrib.PIL import pixelmatch
+
+from ..images import AugustImage
 
 BASE_TEST_IMAGES_PATH = Path("august/images/tests/resources/")
 FORMATS = ("jpg", "png")

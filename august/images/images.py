@@ -1,6 +1,7 @@
 import random
 
 from PIL import Image as PILImage
+
 from .images_base import AugustImageMixin
 
 
