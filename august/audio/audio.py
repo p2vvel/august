@@ -1,7 +1,7 @@
 import librosa
 from numpy import ndarray
 
-from . import utils
+from august.audio import utils
 
 
 class AugustAudio:
@@ -46,3 +46,24 @@ class AugustAudio:
 
     def room(self, p: float = 0.5) -> None:
         self.y = utils.room(self.y, self.sr, p=p)
+
+
+if __name__ == "__main__":
+    from pathlib import Path
+
+    base_path = Path(__file__).parent
+    audio_path = base_path / "tests" / "bff.m4a"
+    audio = AugustAudio(audio_path)
+    # audio.time_shift(p=1)
+    # audio.time_stretch(p=1)
+    # audio.invert_polarity(p=1)
+    # audio.pitch_scale(p=1)
+    # audio.random_gain(p=1)
+    # audio.gaussian_noise(p=1)
+    # audio.time_mask(p=1)
+    # audio.low_pass_filter(p=1)
+    # audio.high_pass_filter(p=1)
+    # audio.room(p=1)
+
+    utils.librosa_play(audio.y, audio.sr)
+    # sf.write("augmented.wav", audio.y, audio.sr)
