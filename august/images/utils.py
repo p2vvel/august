@@ -1,6 +1,4 @@
-from PIL import Image, ImageOps
-
-from . import schemas
+from PIL import Image
 
 
 def sepia(img: Image) -> Image:
@@ -28,22 +26,3 @@ def change_warmth(img: Image, ratio: int) -> Image:
             r, g, b = pixels[px, py]
             pixels[px, py] = (r + ratio, g, b - ratio)
     return result
-
-
-def change_colors(img: Image, color: schemas.Color) -> Image:
-    """Change image colors according to color value"""
-    match color:
-        case schemas.Color.NONE:
-            return img
-        case schemas.Color.BLACK_AND_WHITE:
-            return ImageOps.grayscale(img.convert("RGB"))
-        case schemas.Color.SEPIA:
-            return sepia(img)
-        case schemas.Color.NEGATIVE:
-            return ImageOps.invert(img.convert("RGB"))
-        case schemas.Color.WARM:
-            return change_warmth(img, 15)
-        case schemas.Color.COLD:
-            return change_warmth(img, -15)
-        case _:
-            raise ValueError("Invalid color value")
