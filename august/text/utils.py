@@ -20,68 +20,67 @@ def _download_models(dest_dir: str = ".", model: str = "fasttext") -> None:
             raise ValueError("Model value is unexpected. Only support fasttext, word2vec and glove.")
 
 
-def synonym_replacement(text: str, n: int = 1) -> str:
+def synonym_replacement(text: str, *, p: float = 0.3, n: int = 1) -> str:
     """
     Replace n words in the sentence with synonyms from wordnet.
     """
-    aug = naw.SynonymAug()
+    aug = naw.SynonymAug(aug_p=p)
     augmented_text = aug.augment(text, n=n)
     return augmented_text
 
 
-def antonym_replacement(text: str, n: int = 1) -> str:
+def antonym_replacement(text: str, *, p: float = 0.3, n: int = 1) -> str:
     """
     Replace n words in the sentence with antonyms
     """
-    aug = naw.AntonymAug()
+    aug = naw.AntonymAug(aug_p=p)
     augmented_text = aug.augment(text, n=n)
     return augmented_text
 
 
-def ocr(text: str, n: int = 1):
-    aug = nac.OcrAug()
+def ocr(text: str, *, p: float = 0.3, n: int = 1):
+    aug = nac.OcrAug(aug_char_p=p)
     augmented_texts = aug.augment(text, n=n)
     return augmented_texts
 
 
-def keyboard(text: str, n: int = 1):
-    aug = nac.KeyboardAug()
+def keyboard(text: str, *, p: float = 0.3, n: int = 1):
+    aug = nac.KeyboardAug(aug_char_p=p)
     augmented_texts = aug.augment(text, n=n)
     return augmented_texts
 
 
-def random_char(text: str, n: int = 1):
-    aug = nac.RandomCharAug()
+def random_char(text: str, *, p: float, n: int = 1):
+    aug = nac.RandomCharAug(aug_char_p=p)
     augmented_texts = aug.augment(text, n=n)
     return augmented_texts
 
 
-def _random_word_aug(mode: str, text: str, n: int):
-    aug = naw.RandomWordAug(action=mode)
+def _random_word_aug(mode: str, text: str, *, p: float = 0.3, n: int = 1):
+    aug = naw.RandomWordAug(action=mode, aug_p=p)
     augmented_texts = aug.augment(text, n=n)
     return augmented_texts
 
 
-def random_word_delete(text: str, n: int = 1):
-    return _random_word_aug("delete", text, n)
+def random_word_delete(text: str, *, p: float = 0.3, n: int = 1):
+    return _random_word_aug("delete", text, p=p, n=n)
 
 
-def random_word_substitute(text: str, n: int = 1):
-    return _random_word_aug("substitute", text, n)
+def random_word_substitute(text: str, *, p: float = 0.3, n: int = 1):
+    return _random_word_aug("substitute", text, p=p, n=n)
 
 
-def random_word_swap(text: str, n: int = 1):
-    return _random_word_aug("swap", text, n)
+def random_word_swap(text: str, *, p: float = 0.3, n: int = 1):
+    return _random_word_aug("swap", text, p=p, n=n)
 
 
-def random_word_crop(text: str, n: int = 1):
-    return _random_word_aug("crop", text, n)
+def random_word_crop(text: str, *, p: float = 0.3, n: int = 1):
+    return _random_word_aug("crop", text, p=p, n=n)
 
 
-def spelling(text: str, n: int = 1):
-    aug = naw.SpellingAug()
-    augmented_texts = aug.augment(text, n=n)
-    return augmented_texts
+def spelling(text: str, *, p: float = 0.3, n: int = 1):
+    aug = naw.SpellingAug(aug_p=p)
+    return aug.augment(text, n=n)
 
 
 def embedding(text: str, n: int = 1):
