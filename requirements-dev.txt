@@ -3,3 +3,5 @@ pixelmatch~=0.3
 black~=23.10
 ruff~=0.1
 isort~=5.12
+
+pre-commit
