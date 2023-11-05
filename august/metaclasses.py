@@ -1,7 +1,7 @@
 from typing import Callable
 
 
-class MarkMeta(type):
+class MarkAugmentationMeta(type):
     """
     Metaclass for marking methods as augmentations of some type,
     every type of data should have its own class with this metaclass
@@ -12,13 +12,13 @@ class MarkMeta(type):
 
     """
 
-    methods: list[Callable]
+    augmentations: list[Callable]
 
     def __new__(cls, name, bases, attrs):
         cls = super().__new__(cls, name, bases, attrs)
-        cls.methods = []
+        cls.augmentations = []
         return cls
 
     def mark_augmentation(cls, func):
-        cls.methods.append(func)
+        cls.augmentations.append(func)
         return func

@@ -1,5 +1,8 @@
-from august.metaclasses import MarkMeta
+from august.metaclasses import MarkAugmentationMeta
 
 
-class AugustImageMark(metaclass=MarkMeta):
+class AugustImageMark(metaclass=MarkAugmentationMeta):
     pass
+
+
+mark_augmentation = AugustImageMark.mark_augmentation

@@ -2,13 +2,12 @@ import random
 
 from PIL import Image as PILImage
 
-from august.images.decorators import AugustImageMark
+from august.images.decorators import AugustImageMark, mark_augmentation
 from august.images.mixins import AugustImageMixin
 
 
 class AugustImage(AugustImageMixin):
-    mark_augmentation = AugustImageMark.mark_augmentation
-    _augmentations = AugustImageMark.methods
+    _augmentations = AugustImageMark.augmentations
 
     def __init__(self, img_path: str) -> None:
         self.img = PILImage.open(img_path)
@@ -19,41 +18,41 @@ class AugustImage(AugustImageMixin):
     def show(self, title: str | None = None) -> None:
         self.img.show(title=title)
 
-    @AugustImageMark.mark_augmentation
+    @mark_augmentation
     def mirror(self, p: float = 0.5) -> None:
         if random.random() <= p:
             self._mirror()
 
-    @AugustImageMark.mark_augmentation
+    @mark_augmentation
     def flip(self, p: float = 0.5) -> None:
         if random.random() <= p:
             self._flip()
 
-    @AugustImageMark.mark_augmentation
+    @mark_augmentation
     def color_change(self, p: float = 0.5) -> None:
         if random.random() <= p:
             color_foo = random.choice((self._sepia, self._black_and_white))
             color_foo()
 
-    @AugustImageMark.mark_augmentation
+    @mark_augmentation
     def color_temperature(self, p: float = 0.5, ratio_min: int = -50, ratio_max: int = 50) -> None:
         if random.random() <= p:
             ratio = random.randint(ratio_min, ratio_max)
             self._color_temperature(ratio)
 
-    @AugustImageMark.mark_augmentation
+    @mark_augmentation
     def rotate(self, p: float = 0.5, angle_min: int = -89, angle_max: int = 89) -> None:
         if random.random() <= p:
             angle = random.randint(angle_min, angle_max)
             self._rotate(angle)
 
-    @AugustImageMark.mark_augmentation
+    @mark_augmentation
     def blur(self, p: float = 0.5, pixel_radius_min: int = 1, pixel_radius_max: int = 5) -> None:
         if random.random() <= p:
             pixel_radius = random.randint(pixel_radius_min, pixel_radius_max)
             self._blur(pixel_radius)
 
-    @AugustImageMark.mark_augmentation
+    @mark_augmentation
     def offset(
         self,
         p: float = 0.5,
@@ -68,7 +67,7 @@ class AugustImage(AugustImageMixin):
             y_offset = random.uniform(y_offset_min, y_offset_max)
             self._offset(int(x_offset * x), int(y_offset * y))
 
-    @AugustImageMark.mark_augmentation
+    @mark_augmentation
     def crop(
         self,
         p: float = 0.5,
