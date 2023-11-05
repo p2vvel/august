@@ -2,6 +2,7 @@ import random
 
 from PIL import Image as PILImage
 
+from august.images.config import AugustImageConfig
 from august.images.decorators import AugustImageMark, mark_augmentation
 from august.images.mixins import AugustImageMixin
 from august.mixins import ExecuteAugmentationMixin
@@ -10,8 +11,9 @@ from august.mixins import ExecuteAugmentationMixin
 class AugustImage(AugustImageMixin, ExecuteAugmentationMixin):
     _augmentations = AugustImageMark.augmentations
 
-    def __init__(self, img_path: str) -> None:
+    def __init__(self, img_path: str, config: AugustImageConfig = AugustImageConfig()) -> None:
         self.img = PILImage.open(img_path)
+        self.config = config
 
     def save(self, filename: str) -> None:
         self.img.save(filename)
