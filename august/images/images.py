@@ -1,4 +1,5 @@
 import random
+from pathlib import Path
 
 from PIL import Image as PILImage
 
@@ -11,11 +12,11 @@ from august.mixins import ExecuteAugmentationMixin
 class AugustImage(AugustImageMixin, ExecuteAugmentationMixin):
     _augmentations = AugustImageMark.augmentations
 
-    def __init__(self, img_path: str, config: AugustImageConfig = AugustImageConfig()) -> None:
-        self.img = PILImage.open(img_path)
+    def __init__(self, audio_path: str | Path, config: AugustImageConfig = AugustImageConfig()) -> None:
+        self.img = PILImage.open(audio_path)
         self.config = config
 
-    def save(self, filename: str) -> None:
+    def save(self, filename: str | Path) -> None:
         self.img.save(filename)
 
     def show(self, title: str | None = None) -> None:
