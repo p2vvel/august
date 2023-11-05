@@ -1,54 +1,84 @@
+from pathlib import Path
+
 import librosa
 from numpy import ndarray
 
 from august.audio import utils
 from august.audio.config import AugustAudioConfig
+from august.audio.decorators import AugustAudioMark, mark_augmentation
+from august.mixins import ExecuteAugmentationMixin
 
 
-class AugustAudio:
-    def __init__(self, audio_path: str, config: AugustAudioConfig) -> None:
+class AugustAudio(ExecuteAugmentationMixin):
+    _augmentations = AugustAudioMark.augmentations
+
+    def __init__(self, audio_path: str | Path, config: AugustAudioConfig = AugustAudioConfig()) -> None:
         self.y: ndarray
         self.sr: int
         self.y, self.sr = librosa.load(audio_path)
         self.sr = int(self.sr)
         self.config = config
 
+    @mark_augmentation
     def time_shift(self) -> None:
         p = self.config.time_shift_p
         min_shift, max_shift = self.config.min_shift, self.config.max_shift
         self.y = utils.time_shift(self.y, self.sr, min_shift=min_shift, max_shift=max_shift, p=p)
 
-    def time_stretch(self, min_factor: float = 0.5, max_factor: float = 1.5, p: float = 0.5) -> None:
+    @mark_augmentation
+    def time_stretch(self) -> None:
+        p = self.config.time_stretch_p
+        min_factor, max_factor = self.config.min_stretch_factor, self.config.max_stretch_factor
         self.y = utils.time_stretch(self.y, self.sr, min_factor=min_factor, max_factor=max_factor, p=p)
 
-    def invert_polarity(self, p: float = 0.5) -> None:
+    @mark_augmentation
+    def invert_polarity(self) -> None:
+        p = self.config.invert_polarity_p
         self.y = utils.invert_polarity(self.y, self.sr, p=p)
 
-    def pitch_scale(self, min_semitones: int = -6, max_semitones: int = 6, p: float = 0.5) -> None:
+    @mark_augmentation
+    def pitch_scale(self) -> None:
+        p = self.config.pitch_scale_p
+        min_semitones, max_semitones = self.config.min_semitones, self.config.max_semitones
         self.y = utils.pitch_scale(
             self.y, self.sr, min_semitones=min_semitones, max_semitones=max_semitones, p=p
         )
 
-    def random_gain(self, min_factor: float = 0.5, max_factor: float = 1.5, p: float = 0.5) -> None:
+    @mark_augmentation
+    def random_gain(self) -> None:
+        p = self.config.random_gain_p
+        min_factor, max_factor = self.config.min_gain_factor, self.config.max_gain_factor
         self.y = utils.random_gain(self.y, self.sr, min_factor=min_factor, max_factor=max_factor, p=p)
 
-    def gaussian_noise(
-        self, min_amplitude: float = 0.001, max_amplitude: float = 0.015, p: float = 0.5
-    ) -> None:
+    @mark_augmentation
+    def gaussian_noise(self) -> None:
+        p = self.config.gaussian_noise_p
+        min_amplitude, max_amplitude = self.config.min_gain_amplitude, self.config.max_gain_amplitude
         self.y = utils.gaussian_noise(
             self.y, self.sr, min_amplitude=min_amplitude, max_amplitude=max_amplitude, p=p
         )
 
-    def time_mask(self, min_part: float = 0.01, max_part: float = 0.5, p: float = 0.5) -> None:
+    @mark_augmentation
+    def time_mask(self) -> None:
+        p = self.config.time_mask_p
+        min_part, max_part = self.config.min_mask_part, self.config.max_mask_part
         self.y = utils.time_mask(self.y, self.sr, min_part=min_part, max_part=max_part, p=p)
 
-    def low_pass_filter(self, min_freq: float = 150, max_freq: float = 7500, p: float = 0.5) -> None:
+    @mark_augmentation
+    def low_pass_filter(self) -> None:
+        p = self.config.low_pass_filter_p
+        min_freq, max_freq = self.config.min_low_pass_freq, self.config.max_low_pass_freq
         self.y = utils.low_pass_filter(self.y, self.sr, min_freq=min_freq, max_freq=max_freq, p=p)
 
-    def high_pass_filter(self, min_freq: float = 20, max_freq: float = 2400, p: float = 0.5) -> None:
+    @mark_augmentation
+    def high_pass_filter(self) -> None:
+        p = self.config.high_pass_filter_p
+        min_freq, max_freq = self.config.min_high_pass_freq, self.config.max_high_pass_freq
         self.y = utils.high_pass_filter(self.y, self.sr, min_freq=min_freq, max_freq=max_freq, p=p)
 
-    def room(self, p: float = 0.5) -> None:
+    @mark_augmentation
+    def room(self) -> None:
+        p = self.config.room_p
         self.y = utils.room(self.y, self.sr, p=p)
 
 
@@ -58,6 +88,7 @@ if __name__ == "__main__":
     base_path = Path(__file__).parent
     audio_path = base_path / "tests" / "bff.m4a"
     audio = AugustAudio(audio_path)
+    audio.augment()
     # audio.time_shift(p=1)
     # audio.time_stretch(p=1)
     # audio.invert_polarity(p=1)
