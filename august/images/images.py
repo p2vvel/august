@@ -4,9 +4,10 @@ from PIL import Image as PILImage
 
 from august.images.decorators import AugustImageMark, mark_augmentation
 from august.images.mixins import AugustImageMixin
+from august.mixins import ExecuteAugmentationMixin
 
 
-class AugustImage(AugustImageMixin):
+class AugustImage(AugustImageMixin, ExecuteAugmentationMixin):
     _augmentations = AugustImageMark.augmentations
 
     def __init__(self, img_path: str) -> None:
@@ -93,13 +94,5 @@ if __name__ == "__main__":
     base_path = Path(__file__).parent
     image_path = base_path / "tests" / "alpaca.jpg"
     img = AugustImage(image_path)
-    # img.show(title="original")
-    img.mirror()
-    img.flip()
-    img.color_change()
-    img.color_temperature()
-    img.rotate()
-    img.blur()
-    img.offset()
-    img.crop()
+    img.augment()
     img.show()
