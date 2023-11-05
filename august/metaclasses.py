@@ -8,7 +8,7 @@ class MarkAugmentationMeta(type):
 
     @mark_augmentation should be used to mark methods as augmentations
 
-    augmentation methods are available under .methods attribute
+    augmentation methods are available under .augmentations attribute
 
     """
 
