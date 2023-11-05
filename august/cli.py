@@ -22,11 +22,9 @@ def cli() -> None:
 @click.option("--color_p", help="Color change probability", default=0.5, type=float)
 @click.option("--temperature_p", help="Color temperature probability", default=0.5, type=float)
 @click.option(
-    "--min_temperature_ratio", help="Minimal color temperature change ratio", default=-50, type=int
+    "--min_temperature_ratio", help="Min color temperature change ratio", default=-50, type=int
 )
-@click.option(
-    "--max_temperature_ratio", help="Maximum color temperature change ratio", default=50, type=int
-)
+@click.option("--max_temperature_ratio", help="Max color temperature change ratio", default=50, type=int)
 @click.option("--rotate_p", help="Rotate probability", default=0.5, type=float)
 @click.option("--min_angle", help="Minimal rotate angle", default=-89, type=int)
 @click.option("--max_angle", help="Maximum rotate angle", default=89, type=int)
@@ -47,6 +45,7 @@ def images(source: str, destination: str, n: int, **kwargs) -> None:
     config = AugustImageConfig(**kwargs)
     dest_path = Path(get_directory(destination))
     images = images_in_directory(source)
+    # TODO: make n copies of images
     for img in images:
         img_path = Path(img)
         print("IMG: ", img_path)

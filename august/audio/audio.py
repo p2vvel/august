@@ -2,16 +2,20 @@ import librosa
 from numpy import ndarray
 
 from august.audio import utils
+from august.audio.config import AugustAudioConfig
 
 
 class AugustAudio:
-    def __init__(self, audio_path: str) -> None:
+    def __init__(self, audio_path: str, config: AugustAudioConfig) -> None:
         self.y: ndarray
         self.sr: int
         self.y, self.sr = librosa.load(audio_path)
         self.sr = int(self.sr)
+        self.config = config
 
-    def time_shift(self, min_shift: float = -0.5, max_shift: float = 0.5, p: float = 0.5) -> None:
+    def time_shift(self) -> None:
+        p = self.config.time_shift_p
+        min_shift, max_shift = self.config.min_shift, self.config.max_shift
         self.y = utils.time_shift(self.y, self.sr, min_shift=min_shift, max_shift=max_shift, p=p)
 
     def time_stretch(self, min_factor: float = 0.5, max_factor: float = 1.5, p: float = 0.5) -> None:
