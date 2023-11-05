@@ -5,20 +5,20 @@ from august.utils.dirs import get_directory, images_in_directory
 
 
 class August:
-    def images(self, source: str, destination: str, n: int):
+    def images(self, source: str, destination: str, n: int) -> None:
         dest_path = Path(get_directory(destination))
         images = images_in_directory(source)
         for img in images:
             img_path = Path(img)
             print("IMG: ", img_path)
             aug_img = AugustImage(img_path)
+            aug_img.augment()
             aug_img.save(dest_path / ("aug_" + img_path.name))
-        # print("Image function", images, dest)
 
-    def audio(self):
+    def audio(self) -> None:
         print("Audio function")
 
-    def text(self):
+    def text(self) -> None:
         print("Text function")
 
 
