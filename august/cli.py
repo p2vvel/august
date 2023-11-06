@@ -6,6 +6,8 @@ from august.audio.audio import AugustAudio
 from august.audio.config import AugustAudioConfig
 from august.images.config import AugustImageConfig
 from august.images.images import AugustImage
+from august.text.config import AugustTextConfig
+from august.text.text import AugustText
 from august.utils.dirs import files_with_extensions, get_directory
 
 
@@ -106,8 +108,38 @@ def audio(source: str, destination: str, n: int, **kwargs) -> None:
     print("Audio function")
 
 
+@click.option("--source", "-s", help="Source directory with text", required=True)
+@click.option("--destination", "-d", help="Destination directory for augmented text", required=True)
+@click.option("--n", "-n", help="Number of augmented text", required=True, type=int)
+@click.option("--synonym_replace_p", help="Probability of synonym replacement", default=0.3, type=float)
+@click.option("--antonym_replace_p", help="Probability of antonym replacement", default=0.3, type=float)
+@click.option("--ocr_p", help="Probability of OCR distortion", default=0.3, type=float)
+@click.option("--keyboard_p", help="Probability of keyboard typos", default=0.3, type=float)
+@click.option(
+    "--random_character_p", help="Probability of random character insertion", default=0.3, type=float
+)
+@click.option(
+    "--random_word_delete_p", help="Probability of random word delete", default=0.3, type=float
+)
+@click.option(
+    "--random_word_substitute_p", help="Probability of random word substitute", default=0.3, type=float
+)
+@click.option("--random_word_swap_p", help="Probability of random word swap", default=0.3, type=float)
+@click.option("--spelling_p", help="Probability of misspelling ", default=0.3, type=float)
 @click.command()
-def text() -> None:
+def text(source: str, destination: str, n: int, **kwargs) -> None:
+    config = AugustTextConfig(**kwargs)
+    dest_path = Path(get_directory(destination))
+    text_files = files_with_extensions(source, (".txt",))
+
+    for txt in text_files:
+        txt_path = Path(txt)
+        print("TEXT: ", txt_path)
+        with open(txt_path, "r") as f:
+            text_content = f.read()
+        txt_aug = AugustText(text=text_content, config=config)
+        txt_aug.augment()
+        txt_aug.save(dest_path / ("aug_" + txt_path.name))
     print("Text function")
 
 
