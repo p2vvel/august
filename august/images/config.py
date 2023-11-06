@@ -2,6 +2,10 @@ from pydantic import BaseModel, Field
 
 
 class AugustImageConfig(BaseModel):
+    """
+    Model storing configuration data for AugustImage class
+    """
+
     mirror_p: float = Field(0.5, description="Mirror probability", ge=0, le=1)
     flip_p: float = Field(0.5, description="Flip probability", ge=0, le=1)
     color_p: float = Field(0.5, description="Color change probability", ge=0, le=1)
