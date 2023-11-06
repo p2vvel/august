@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import librosa
+import soundfile as sf
 from numpy import ndarray
 
 from august.audio import utils
@@ -18,6 +19,9 @@ class AugustAudio(ExecuteAugmentationMixin):
         self.y, self.sr = librosa.load(audio_path)
         self.sr = int(self.sr)
         self.config = config
+
+    def save(self, filename: str | Path, format: str = "wav") -> None:
+        sf.write(filename, data=self.y, samplerate=self.sr, format=format)
 
     @mark_augmentation
     def time_shift(self) -> None:

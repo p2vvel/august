@@ -2,9 +2,11 @@ from pathlib import Path
 
 import click
 
+from august.audio.audio import AugustAudio
+from august.audio.config import AugustAudioConfig
 from august.images.config import AugustImageConfig
 from august.images.images import AugustImage
-from august.utils.dirs import get_directory, images_in_directory
+from august.utils.dirs import files_with_extensions, get_directory
 
 
 # cli = click.group("august")
@@ -44,19 +46,63 @@ def cli() -> None:
 def images(source: str, destination: str, n: int, **kwargs) -> None:
     config = AugustImageConfig(**kwargs)
     dest_path = Path(get_directory(destination))
-    images = images_in_directory(source)
+    image_files = files_with_extensions(source, (".jpg", ".jpeg", ".png"))
+
     # TODO: make n copies of images
-    for img in images:
+    for img in image_files:
         img_path = Path(img)
         print("IMG: ", img_path)
-        aug_img = AugustImage(img_path=img_path, config=config)
+        aug_img = AugustImage(audio_path=img_path, config=config)
         aug_img.augment()
         aug_img.save(dest_path / ("aug_" + img_path.name))
     print("Images function")
 
 
 @click.command()
-def audio() -> None:
+@click.option("--source", "-s", help="Source directory with audio", required=True)
+@click.option("--destination", "-d", help="Destination directory for augmented audio", required=True)
+@click.option("--n", "-n", help="Number of augmented audio", required=True, type=int)
+@click.option("--time_shift_p", help="Time shift probability", default=0.5, type=float)
+@click.option(
+    "--min_shift", help="Minimal shift as a fraction of total length", default=-0.5, type=float
+)
+@click.option("--max_shift", help="Maximum shift as a fraction of total length", default=0.5, type=float)
+@click.option("--time_stretch_p", help="Time stretch probability", default=0.5, type=float)
+@click.option("--min_stretch_factor", help="Minimal time stretch factor", default=0.5, type=float)
+@click.option("--max_stretch_factor", help="Maximum time stretch factor", default=1.5, type=float)
+@click.option("--invert_polarity_p", help="Invert polarity probability", default=0.5, type=float)
+@click.option("--pitch_scale_p", help="Pitch scale probability", default=0.5, type=float)
+@click.option("--min_semitones", help="Minimal pitch scale semitones", default=-6, type=int)
+@click.option("--max_semitones", help="Maximum pitch scale semitones", default=6, type=int)
+@click.option("--random_gain_p", help="Random gain probability", default=0.5, type=float)
+@click.option("--min_gain_factor", help="Minimal gain factor", default=0.5, type=float)
+@click.option("--max_gain_factor", help="Maximum gain factor", default=1.5, type=float)
+@click.option("--gaussian_noise_p", help="Gaussian noise probability", default=0.5, type=float)
+@click.option("--min_gain_amplitude", help="Minimal gain amplitude", default=0.001, type=float)
+@click.option("--max_gain_amplitude", help="Maximum gain amplitude", default=0.015, type=float)
+@click.option("--time_mask_p", help="Time mask probability", default=0.5, type=float)
+@click.option("--min_mask_part", help="Minimal mask part", default=0.01, type=float)
+@click.option("--max_mask_part", help="Maximum mask part", default=0.5, type=float)
+@click.option("--low_pass_filter_p", help="Low pass filter probability", default=0.5, type=float)
+@click.option("--min_low_pass_freq", help="Minimal low pass filter frequency", default=150, type=float)
+@click.option("--max_low_pass_freq", help="Maximum low pass filter frequency", default=7500, type=float)
+@click.option("--high_pass_filter_p", help="High pass filter probability", default=0.5, type=float)
+@click.option("--min_high_pass_freq", help="Minimal high pass filter frequency", default=20, type=float)
+@click.option(
+    "--max_high_pass_freq", help="Maximum high pass filter frequency", default=2400, type=float
+)
+@click.option("--room_p", help="Room effect probability", default=0.5, type=float)
+def audio(source: str, destination: str, n: int, **kwargs) -> None:
+    config = AugustAudioConfig(**kwargs)
+    dest_path = Path(get_directory(destination))
+    audio_files = files_with_extensions(source, (".mp3", ".wav", ".m4a"))
+
+    for audio in audio_files:
+        audio_path = Path(audio)
+        print("AUDIO: ", audio_path)
+        augio = AugustAudio(audio_path=audio_path, config=config)
+        augio.augment()
+        augio.save(dest_path / ("aug_" + audio_path.name))
     print("Audio function")
 
 
