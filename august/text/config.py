@@ -2,6 +2,10 @@ from pydantic import BaseModel, Field
 
 
 class AugustTextConfig(BaseModel):
+    """
+    Model storing configuration data for AugustText class
+    """
+
     synonym_replace_p: float = Field(0.3, text="Probability of synonym replacement", ge=0, le=1)
     antonym_replace_p: float = Field(0.3, text="Probability of antonym replacement", ge=0, le=1)
     ocr_p: float = Field(0.3, text="Probability of OCR distortion", ge=0, le=1)
