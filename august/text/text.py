@@ -53,20 +53,3 @@ class AugustText(ExecuteAugmentationMixin):
     @mark_augmentation
     def spelling(self) -> None:
         self.text = utils.spelling(self.text, p=self.config.spelling_p)[0]
-
-
-if __name__ == "__main__":
-    txt = "The quick brown fox jumps over the lazy dog"
-
-    aug = AugustText(txt)
-    aug.synonym_replace()
-    aug.antonym_replace()
-    # aug.ocr()
-    # aug.keyboard()
-    # aug.random_character()
-    aug.random_word_delete()
-    # aug.random_word_substitute()
-    aug.random_word_swap()
-    # aug.spelling()
-
-    print(aug.text)

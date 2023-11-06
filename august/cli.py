@@ -12,7 +12,6 @@ from august.text.text import AugustText
 from august.utils.dirs import files_with_extensions, get_directory
 
 
-# cli = click.group("august")
 @click.group()
 def cli() -> None:
     pass

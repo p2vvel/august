@@ -77,13 +77,3 @@ class AugustImage(AugustImageMixin, ExecuteAugmentationMixin):
             x_max = x_min + crop_width
             y_max = y_min + crop_height
             self._crop(x_min, y_min, x_max, y_max)
-
-
-if __name__ == "__main__":
-    from pathlib import Path
-
-    base_path = Path(__file__).parent
-    image_path = base_path / "tests" / "alpaca.jpg"
-    img = AugustImage(image_path)
-    img.augment()
-    img.show()
