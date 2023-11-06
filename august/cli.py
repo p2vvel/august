@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 
 import click
@@ -49,14 +50,13 @@ def images(source: str, destination: str, n: int, **kwargs) -> None:
     config = AugustImageConfig(**kwargs)
     dest_path = Path(get_directory(destination))
     image_files = files_with_extensions(source, (".jpg", ".jpeg", ".png"))
-
-    # TODO: make n copies of images
-    for img in image_files:
+    files_to_augment = random.choices(image_files, k=n)
+    for index, img in enumerate(files_to_augment):
         img_path = Path(img)
         print("IMG: ", img_path)
         aug_img = AugustImage(audio_path=img_path, config=config)
         aug_img.augment()
-        aug_img.save(dest_path / ("aug_" + img_path.name))
+        aug_img.save(dest_path / (f"{index}_{img_path.name}"))
     print("Images function")
 
 
@@ -98,13 +98,13 @@ def audio(source: str, destination: str, n: int, **kwargs) -> None:
     config = AugustAudioConfig(**kwargs)
     dest_path = Path(get_directory(destination))
     audio_files = files_with_extensions(source, (".mp3", ".wav", ".m4a"))
-
-    for audio in audio_files:
-        audio_path = Path(audio)
+    files_to_augment = random.choices(audio_files, k=n)
+    for index, aud in enumerate(files_to_augment):
+        audio_path = Path(aud)
         print("AUDIO: ", audio_path)
         augio = AugustAudio(audio_path=audio_path, config=config)
         augio.augment()
-        augio.save(dest_path / ("aug_" + audio_path.name))
+        augio.save(dest_path / (f"{index}_{audio_path.name}"))
     print("Audio function")
 
 
@@ -131,15 +131,15 @@ def text(source: str, destination: str, n: int, **kwargs) -> None:
     config = AugustTextConfig(**kwargs)
     dest_path = Path(get_directory(destination))
     text_files = files_with_extensions(source, (".txt",))
-
-    for txt in text_files:
+    files_to_augment = random.choices(text_files, k=n)
+    for index, txt in enumerate(files_to_augment):
         txt_path = Path(txt)
         print("TEXT: ", txt_path)
         with open(txt_path, "r") as f:
             text_content = f.read()
         txt_aug = AugustText(text=text_content, config=config)
         txt_aug.augment()
-        txt_aug.save(dest_path / ("aug_" + txt_path.name))
+        txt_aug.save(dest_path / (f"{index}_{txt_path.name}"))
     print("Text function")
 
 
