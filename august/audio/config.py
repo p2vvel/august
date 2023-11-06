@@ -2,6 +2,10 @@ from pydantic import BaseModel, Field
 
 
 class AugustAudioConfig(BaseModel):
+    """
+    Model storing configuration data for AugustAudio class
+    """
+
     time_shift_p: float = Field(0.5, description="Time shift probability", ge=0, le=1)
     min_shift: float = Field(
         -0.5, description="Minimal shift as a fraction of total length", ge=-1, le=1
