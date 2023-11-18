@@ -1,4 +1,6 @@
 import random
+import time
+from multiprocessing import Pool
 from pathlib import Path
 
 import click
@@ -15,6 +17,14 @@ from august.utils.dirs import files_with_extensions, get_directory
 @click.group()
 def cli() -> None:
     pass
+
+
+def _process_image(index, img, config, dest_path):
+    img_path = Path(img)
+    print("IMG: ", img_path)
+    aug_img = AugustImage(audio_path=img_path, config=config)
+    aug_img.augment()
+    aug_img.save(dest_path / (f"{index}_{img_path.name}"))
 
 
 @click.command()
@@ -46,17 +56,25 @@ def cli() -> None:
 @click.option("--min_y_crop", help="Minimal crop height", default=0.6, type=float)
 @click.option("--max_y_crop", help="Maximum crop height", default=0.9, type=float)
 def images(source: str, destination: str, n: int, **kwargs) -> None:
+    start = time.time()
     config = AugustImageConfig(**kwargs)
     dest_path = Path(get_directory(destination))
     image_files = files_with_extensions(source, (".jpg", ".jpeg", ".png"))
     files_to_augment = random.choices(image_files, k=n)
-    for index, img in enumerate(files_to_augment):
-        img_path = Path(img)
-        print("IMG: ", img_path)
-        aug_img = AugustImage(audio_path=img_path, config=config)
-        aug_img.augment()
-        aug_img.save(dest_path / (f"{index}_{img_path.name}"))
-    print("Images function")
+
+    arguments = [(index, img, config, dest_path) for index, img in enumerate(files_to_augment)]
+    with Pool() as p:
+        p.starmap(_process_image, arguments)
+
+    print(f"Images function: {time.time() - start}")
+
+
+def _process_audio(index, aud, config, dest_path):
+    audio_path = Path(aud)
+    print("AUDIO: ", audio_path)
+    augio = AugustAudio(audio_path=audio_path, config=config)
+    augio.augment()
+    augio.save(dest_path / (f"{index}_{audio_path.name}"))
 
 
 @click.command()
@@ -94,17 +112,17 @@ def images(source: str, destination: str, n: int, **kwargs) -> None:
 )
 @click.option("--room_p", help="Room effect probability", default=0.5, type=float)
 def audio(source: str, destination: str, n: int, **kwargs) -> None:
+    start = time.time()
     config = AugustAudioConfig(**kwargs)
     dest_path = Path(get_directory(destination))
     audio_files = files_with_extensions(source, (".mp3", ".wav", ".m4a"))
     files_to_augment = random.choices(audio_files, k=n)
-    for index, aud in enumerate(files_to_augment):
-        audio_path = Path(aud)
-        print("AUDIO: ", audio_path)
-        augio = AugustAudio(audio_path=audio_path, config=config)
-        augio.augment()
-        augio.save(dest_path / (f"{index}_{audio_path.name}"))
-    print("Audio function")
+
+    arguments = [(index, aud, config, dest_path) for index, aud in enumerate(files_to_augment)]
+    with Pool() as p:
+        p.starmap(_process_audio, arguments)
+
+    print(f"Audio function: {time.time() - start}")
 
 
 @click.option("--source", "-s", help="Source directory with text", required=True)
@@ -127,6 +145,7 @@ def audio(source: str, destination: str, n: int, **kwargs) -> None:
 @click.option("--spelling_p", help="Probability of misspelling ", default=0.3, type=float)
 @click.command()
 def text(source: str, destination: str, n: int, **kwargs) -> None:
+    start = time.time()
     config = AugustTextConfig(**kwargs)
     dest_path = Path(get_directory(destination))
     text_files = files_with_extensions(source, (".txt",))
@@ -139,7 +158,7 @@ def text(source: str, destination: str, n: int, **kwargs) -> None:
         txt_aug = AugustText(text=text_content, config=config)
         txt_aug.augment()
         txt_aug.save(dest_path / (f"{index}_{txt_path.name}"))
-    print("Text function")
+    print(f"Text function: {time.time() - start}")
 
 
 cli.add_command(images)
